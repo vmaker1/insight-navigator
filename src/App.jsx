@@ -232,145 +232,140 @@ export default function App() {
   }
 
   if (step === "report") {
-    return (
-      <div className="report-page">
-        <div className="report-container">
-          <p className="eyebrow dark">Insight Navigator Report</p>
-          <h1>{target} 전략 분석 보고서</h1>
-
-          <section>
-            <h2>Executive Summary</h2>
-            <p>
-              <strong>{target}</strong>의 현재 목표는 다음과 같이 정리됩니다.
-              <br />
-              {goal || "목표 정보가 충분하지 않습니다."}
-            </p>
-            <p>
-              현재 가장 먼저 검토해야 할 부분은 사용자가 언급한 어려움,
-              즉 <strong>{challenge || "핵심 문제 미입력"}</strong>을 전략적으로
-              해석하는 것입니다.
-            </p>
-          </section>
-
-          <section>
-            <h2>입력 정보 요약</h2>
-            <div className="info-grid">
-              <div>
-                <span>분석 대상</span>
-                <strong>{target}</strong>
-              </div>
-              <div>
-                <span>보고서 수신</span>
-                <strong>{contact.email}</strong>
-              </div>
-              <div>
-                <span>이름</span>
-                <strong>{contact.name || "미입력"}</strong>
-              </div>
-              <div>
-                <span>회사명</span>
-                <strong>{contact.company || "미입력"}</strong>
-              </div>
-            </div>
-          </section>
-
-          <section className="swot-grid">
-            <div>
-              <h3>Strength</h3>
-              <p>
-                이미 운영 중인 대상과 목표가 존재하므로, 기존 자산과 경험을
-                전략적으로 정리할 수 있습니다.
-              </p>
-            </div>
-            <div>
-              <h3>Weakness</h3>
-              <p>
-                현재 목표와 문제는 확인되었지만, 예산·인력·성과 데이터가
-                부족하여 실행 가능성 평가는 제한적입니다.
-              </p>
-            </div>
-            <div>
-              <h3>Opportunity</h3>
-              <p>
-                AI 검색, 콘텐츠 정비, 타깃별 메시지 분리를 통해 새로운 노출과
-                협력 기회를 만들 수 있습니다.
-              </p>
-            </div>
-            <div>
-              <h3>Threat</h3>
-              <p>
-                경쟁 대상 증가, 관심 분산, 메시지 불명확성은 향후 성장을
-                제한할 수 있는 요인입니다.
-              </p>
-            </div>
-          </section>
-
-          <section>
-            <h2>핵심 문제 정의</h2>
-            <p>
-              현재 문제는 단순히 홍보 부족이라기보다, 목표 고객에게 전달되는
-              핵심 메시지와 실행 우선순위가 충분히 정리되지 않은 데 있을
-              가능성이 높습니다.
-            </p>
-          </section>
-
-          <section>
-            <h2>추천 전략</h2>
-            <ol>
-              <li>핵심 타깃과 의사결정자를 분리해서 정의합니다.</li>
-              <li>AI와 검색에 잘 노출되는 소개 콘텐츠를 정비합니다.</li>
-              <li>이번 달 안에 실행 가능한 홍보·협력 액션을 3개로 줄입니다.</li>
-            </ol>
-          </section>
-
-          <section>
-            <h2>Quick Win</h2>
-            <ul>
-              <li>이번 주: 공식 소개문과 FAQ를 정리합니다.</li>
-              <li>이번 달: 목표별 메시지를 분리합니다.</li>
-              <li>3개월: 실행 결과를 바탕으로 재분석합니다.</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2>프로젝트 저장 안내</h2>
-            <p>
-              이 보고서는 입력하신 이메일로 전달되며, 향후 동일 프로젝트의
-              변화 추적과 재분석에 활용될 수 있습니다.
-            </p>
-          </section>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="dark-page">
-      <div className="center-content">
-        <p className="eyebrow">Powered by AI Facilitator</p>
+    <div className="report-page">
+      <div className="report-container">
+        <p className="eyebrow dark">Insight Navigator Report</p>
+        <h1>{target} 전략 분석 보고서</h1>
 
-        <h1>
-          모든 답은
-          <br />
-          질문에서 시작됩니다.
-        </h1>
+        <section className="executive-summary">
+          <h2>Executive Summary</h2>
 
-        <p className="subtitle">더 나은 질문은 더 나은 전략을 만듭니다.</p>
+          <div className="summary-highlight">
+            <h3>현재 종합 진단</h3>
+            <p>
+              <strong>{target}</strong>은 현재 명확한 분석 목표를 가지고 있으나,
+              이를 실제 성과로 연결하기 위해서는 목표 고객, 메시지, 실행 우선순위를
+              더 구체적으로 정리할 필요가 있습니다.
+            </p>
+          </div>
 
-        <div className="search-box">
-          <input
-            type="text"
-            placeholder="어떤 대상을 분석해 드릴까요?"
-            value={target}
-            onChange={(e) => setTarget(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") startAnalysis();
-            }}
-          />
-          <button onClick={startAnalysis}>분석 시작</button>
-        </div>
+          <div className="summary-grid">
+            <div>
+              <span>분석 목표</span>
+              <p>{goal || "목표 정보가 충분하지 않습니다."}</p>
+            </div>
 
-        <p className="examples">기업 · 브랜드 · 행사 · 기관 · 프로젝트</p>
+            <div>
+              <span>현재 어려움</span>
+              <p>{challenge || "현재 어려움에 대한 입력이 부족합니다."}</p>
+            </div>
+
+            <div>
+              <span>핵심 문제</span>
+              <p>
+                단순한 홍보 부족이라기보다, 누구에게 어떤 가치를 전달할 것인지에
+                대한 전략 메시지가 충분히 정리되지 않은 상태로 보입니다.
+              </p>
+            </div>
+
+            <div>
+              <span>핵심 기회</span>
+              <p>
+                AI 검색 노출, 공식 소개 콘텐츠 정비, 타깃별 메시지 분리를 통해
+                더 넓은 고객과 협력 기회를 만들 수 있습니다.
+              </p>
+            </div>
+          </div>
+
+          <div className="strategy-rank">
+            <h3>우선 실행 전략</h3>
+            <ol>
+              <li>
+                <strong>핵심 타깃 재정의</strong>
+                <p>참여자, 고객, 후원자, 협력자를 구분해 각각 다른 메시지를 설계합니다.</p>
+              </li>
+              <li>
+                <strong>AI 검색 친화 콘텐츠 구축</strong>
+                <p>홈페이지 소개문, FAQ, 블로그형 설명 콘텐츠를 정리해 AI와 검색엔진이 이해하기 쉽게 만듭니다.</p>
+              </li>
+              <li>
+                <strong>실행 가능한 홍보 액션 압축</strong>
+                <p>당장 실행 가능한 과제를 3개 이내로 줄여 실행력을 높입니다.</p>
+              </li>
+            </ol>
+          </div>
+        </section>
+
+        <section>
+          <h2>입력 정보 요약</h2>
+          <div className="info-grid">
+            <div>
+              <span>분석 대상</span>
+              <strong>{target}</strong>
+            </div>
+            <div>
+              <span>보고서 수신</span>
+              <strong>{contact.email}</strong>
+            </div>
+            <div>
+              <span>이름</span>
+              <strong>{contact.name || "미입력"}</strong>
+            </div>
+            <div>
+              <span>회사명</span>
+              <strong>{contact.company || "미입력"}</strong>
+            </div>
+          </div>
+        </section>
+
+        <section className="score-section">
+          <h2>진단 점수</h2>
+          <div className="score-grid">
+            <div><span>시장성</span><strong>78</strong></div>
+            <div><span>브랜드 신뢰도</span><strong>82</strong></div>
+            <div><span>AI 노출도</span><strong>54</strong></div>
+            <div><span>차별화 메시지</span><strong>61</strong></div>
+            <div><span>실행 준비도</span><strong>68</strong></div>
+            <div><span>기회 가능성</span><strong>84</strong></div>
+          </div>
+        </section>
+
+        <section className="swot-grid">
+          <div>
+            <h3>Strength</h3>
+            <p>기존 자산과 경험을 전략적으로 정리할 수 있는 기반이 있습니다.</p>
+          </div>
+          <div>
+            <h3>Weakness</h3>
+            <p>핵심 메시지와 실행 우선순위가 더 명확하게 정리될 필요가 있습니다.</p>
+          </div>
+          <div>
+            <h3>Opportunity</h3>
+            <p>AI 검색, 콘텐츠 정비, 협력 네트워크 확장 가능성이 있습니다.</p>
+          </div>
+          <div>
+            <h3>Threat</h3>
+            <p>경쟁 증가와 관심 분산에 대응하기 위한 차별화 전략이 필요합니다.</p>
+          </div>
+        </section>
+
+        <section>
+          <h2>핵심 문제 정의</h2>
+          <p>
+            현재 문제는 단순히 더 많이 알리는 것이 아니라, 누구에게 어떤 이유로
+            선택되어야 하는지를 명확히 만드는 데 있습니다.
+          </p>
+        </section>
+
+        <section>
+          <h2>Quick Win</h2>
+          <ul>
+            <li>이번 주: 공식 소개문과 FAQ를 정리합니다.</li>
+            <li>이번 달: 목표별 메시지를 분리합니다.</li>
+            <li>3개월: 실행 결과를 바탕으로 재분석합니다.</li>
+          </ul>
+        </section>
       </div>
     </div>
   );
