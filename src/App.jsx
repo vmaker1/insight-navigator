@@ -5,6 +5,12 @@ export default function App() {
   const [step, setStep] = useState("landing");
   const [target, setTarget] = useState("");
   const [goal, setGoal] = useState("");
+  const [challenge, setChallenge] = useState("");
+  const [contact, setContact] = useState({
+    email: "",
+    name: "",
+    company: "",
+  });
 
   const startAnalysis = () => {
     if (!target.trim()) return;
@@ -12,6 +18,15 @@ export default function App() {
 
     setTimeout(() => {
       setStep("confirm");
+    }, 2200);
+  };
+
+  const createReport = () => {
+    if (!contact.email.trim()) return;
+    setStep("generating");
+
+    setTimeout(() => {
+      setStep("report");
     }, 2200);
   };
 
@@ -99,7 +114,7 @@ export default function App() {
           <h2>제가 이해한 목표는 다음과 같습니다.</h2>
 
           <div className="summary-box">
-            <p>{goal}</p>
+            <p>{goal || "아직 입력된 목표가 없습니다."}</p>
           </div>
 
           <p className="description">
@@ -107,7 +122,9 @@ export default function App() {
           </p>
 
           <div className="button-row">
-            <button onClick={() => setStep("interview")}>질문을 이어갈게요</button>
+            <button onClick={() => setStep("interview")}>
+              질문을 이어갈게요
+            </button>
             <button className="secondary" onClick={() => setStep("goal")}>
               수정할게요
             </button>
@@ -126,7 +143,9 @@ export default function App() {
 
           <textarea
             className="goal-input"
-            placeholder="자유롭게 입력해 주세요."
+            placeholder="자유롭게 입력해 주세요. 예: 홍보는 하고 있지만 실제 문의나 참여로 이어지지 않습니다."
+            value={challenge}
+            onChange={(e) => setChallenge(e.target.value)}
           />
 
           <p className="accuracy">현재 분석 정확도 72%</p>
@@ -155,11 +174,58 @@ export default function App() {
             </div>
           </div>
 
-          <input className="text-input" placeholder="이메일 *" />
-          <input className="text-input" placeholder="이름" />
-          <input className="text-input" placeholder="회사명" />
+          <div className="summary-box">
+            <p>
+              <strong>목표</strong>
+              <br />
+              {goal || "입력된 목표 없음"}
+            </p>
+            <br />
+            <p>
+              <strong>현재 어려움</strong>
+              <br />
+              {challenge || "입력된 내용 없음"}
+            </p>
+          </div>
 
-          <button onClick={() => setStep("report")}>보고서 생성하기</button>
+          <input
+            className="text-input"
+            placeholder="이메일 *"
+            value={contact.email}
+            onChange={(e) =>
+              setContact({ ...contact, email: e.target.value })
+            }
+          />
+          <input
+            className="text-input"
+            placeholder="이름"
+            value={contact.name}
+            onChange={(e) => setContact({ ...contact, name: e.target.value })}
+          />
+          <input
+            className="text-input"
+            placeholder="회사명"
+            value={contact.company}
+            onChange={(e) =>
+              setContact({ ...contact, company: e.target.value })
+            }
+          />
+
+          <button onClick={createReport}>보고서 생성하기</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === "generating") {
+    return (
+      <div className="dark-page">
+        <div className="center-content">
+          <p className="eyebrow">Insight Navigator Report</p>
+          <h1>전략 보고서를 생성하고 있습니다.</h1>
+          <p className="subtitle">
+            SWOT을 정리하고 핵심 문제와 실행 전략을 도출하고 있습니다.
+          </p>
         </div>
       </div>
     );
@@ -175,42 +241,103 @@ export default function App() {
           <section>
             <h2>Executive Summary</h2>
             <p>
-              현재 가장 중요한 과제는 목표를 명확히 하고, 이를 실행 가능한
-              전략으로 전환하는 것입니다.
+              <strong>{target}</strong>의 현재 목표는 다음과 같이 정리됩니다.
+              <br />
+              {goal || "목표 정보가 충분하지 않습니다."}
+            </p>
+            <p>
+              현재 가장 먼저 검토해야 할 부분은 사용자가 언급한 어려움,
+              즉 <strong>{challenge || "핵심 문제 미입력"}</strong>을 전략적으로
+              해석하는 것입니다.
             </p>
           </section>
 
+          <section>
+            <h2>입력 정보 요약</h2>
+            <div className="info-grid">
+              <div>
+                <span>분석 대상</span>
+                <strong>{target}</strong>
+              </div>
+              <div>
+                <span>보고서 수신</span>
+                <strong>{contact.email}</strong>
+              </div>
+              <div>
+                <span>이름</span>
+                <strong>{contact.name || "미입력"}</strong>
+              </div>
+              <div>
+                <span>회사명</span>
+                <strong>{contact.company || "미입력"}</strong>
+              </div>
+            </div>
+          </section>
+
           <section className="swot-grid">
-            <div><h3>Strength</h3><p>기존 자산과 신뢰 기반을 활용할 수 있습니다.</p></div>
-            <div><h3>Weakness</h3><p>핵심 메시지와 실행 우선순위가 더 명확해야 합니다.</p></div>
-            <div><h3>Opportunity</h3><p>AI 검색, 콘텐츠, 협력 네트워크 확장 가능성이 있습니다.</p></div>
-            <div><h3>Threat</h3><p>경쟁 증가와 관심 분산에 대응해야 합니다.</p></div>
+            <div>
+              <h3>Strength</h3>
+              <p>
+                이미 운영 중인 대상과 목표가 존재하므로, 기존 자산과 경험을
+                전략적으로 정리할 수 있습니다.
+              </p>
+            </div>
+            <div>
+              <h3>Weakness</h3>
+              <p>
+                현재 목표와 문제는 확인되었지만, 예산·인력·성과 데이터가
+                부족하여 실행 가능성 평가는 제한적입니다.
+              </p>
+            </div>
+            <div>
+              <h3>Opportunity</h3>
+              <p>
+                AI 검색, 콘텐츠 정비, 타깃별 메시지 분리를 통해 새로운 노출과
+                협력 기회를 만들 수 있습니다.
+              </p>
+            </div>
+            <div>
+              <h3>Threat</h3>
+              <p>
+                경쟁 대상 증가, 관심 분산, 메시지 불명확성은 향후 성장을
+                제한할 수 있는 요인입니다.
+              </p>
+            </div>
           </section>
 
           <section>
             <h2>핵심 문제 정의</h2>
             <p>
-              현재 문제는 단순 홍보 부족보다, 목표 고객에게 전달되는 메시지와
-              실행 구조가 충분히 정리되지 않은 데 있을 가능성이 높습니다.
+              현재 문제는 단순히 홍보 부족이라기보다, 목표 고객에게 전달되는
+              핵심 메시지와 실행 우선순위가 충분히 정리되지 않은 데 있을
+              가능성이 높습니다.
             </p>
           </section>
 
           <section>
             <h2>추천 전략</h2>
             <ol>
-              <li>핵심 타깃을 다시 정의합니다.</li>
+              <li>핵심 타깃과 의사결정자를 분리해서 정의합니다.</li>
               <li>AI와 검색에 잘 노출되는 소개 콘텐츠를 정비합니다.</li>
-              <li>바로 실행 가능한 협력·홍보 액션을 정리합니다.</li>
+              <li>이번 달 안에 실행 가능한 홍보·협력 액션을 3개로 줄입니다.</li>
             </ol>
           </section>
 
           <section>
             <h2>Quick Win</h2>
             <ul>
-              <li>이번 주: 소개문과 FAQ 정리</li>
-              <li>이번 달: 핵심 타깃별 메시지 분리</li>
-              <li>3개월: 실행 결과를 바탕으로 재분석</li>
+              <li>이번 주: 공식 소개문과 FAQ를 정리합니다.</li>
+              <li>이번 달: 목표별 메시지를 분리합니다.</li>
+              <li>3개월: 실행 결과를 바탕으로 재분석합니다.</li>
             </ul>
+          </section>
+
+          <section>
+            <h2>프로젝트 저장 안내</h2>
+            <p>
+              이 보고서는 입력하신 이메일로 전달되며, 향후 동일 프로젝트의
+              변화 추적과 재분석에 활용될 수 있습니다.
+            </p>
           </section>
         </div>
       </div>
