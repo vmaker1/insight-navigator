@@ -6,6 +6,9 @@ export default function App() {
   const [target, setTarget] = useState("");
   const [goal, setGoal] = useState("");
   const [challenge, setChallenge] = useState("");
+  const [resources, setResources] = useState("");
+const [attempts, setAttempts] = useState("");
+const [successCriteria, setSuccessCriteria] = useState("");
   const [contact, setContact] = useState({
     email: "",
     name: "",
