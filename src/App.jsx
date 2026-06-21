@@ -17,6 +17,7 @@ export default function App() {
   });
   const [reports, setReports] = useState([]);
   const [aiReport, setAiReport] = useState(null);
+  const [discovery, setDiscovery] = useState(null);
 
   const loadReports = async () => {
   const { data, error } = await supabase
@@ -32,11 +33,34 @@ export default function App() {
   setReports(data || []);
 };
 
-  const startAnalysis = () => {
-    if (!target.trim()) return;
-    setStep("loading");
-    setTimeout(() => setStep("confirm"), 2200);
-  };
+  const startAnalysis = async () => {
+  if (!target.trim()) return;
+
+  setStep("loading");
+
+  try {
+    const response = await fetch("/api/discover", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ target }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "대상 분석 오류");
+    }
+
+    setDiscovery(result.discovery);
+    setStep("confirm");
+  } catch (error) {
+    console.error(error);
+    alert("대상 정보를 분석하는 중 오류가 발생했습니다.");
+    setStep("landing");
+  }
+};
 
   const createReport = async () => {
   if (!contact.email.trim()) return;
@@ -153,16 +177,19 @@ export default function App() {
         <div className="card">
           <p className="eyebrow dark">Discovery</p>
           <h2>AI가 찾은 분석 대상</h2>
-          <h1 className="target-title">{target}</h1>
           <p className="description">
-            입력하신 대상을 기준으로 공개 자료와 기본 정보를 바탕으로 현재 포지션을 정리했습니다.
+            {discovery?.summary ||
+              "입력하신 대상을 기준으로 분석을 시작합니다."}
+          </p>
+          <p className="description">
+            입력하신 대상을 기준으로 분석을 시작합니다. 더 정확한 보고서를 위해 목표, 현재 문제, 보유 자원, 성공 기준을 차례로 확인하겠습니다.
           </p>
 
           <div className="info-grid">
-            <div><span>유형</span><strong>브랜드 / 프로젝트</strong></div>
-            <div><span>분석 방향</span><strong>전략 진단</strong></div>
-            <div><span>핵심 가치</span><strong>추가 확인 필요</strong></div>
-            <div><span>분석 신뢰도</span><strong>62%</strong></div>
+            <div><span>유형</span><strong>{discovery?.type || "확인 필요"}</strong></div>
+            <div><span>산업군</span><strong>{discovery?.industry || "확인 필요"}</strong></div>
+            <div><span>핵심 가치</span><strong>{discovery?.coreValue || "확인 필요"}</strong></div>
+            <div><span>분석 신뢰도</span><strong>{discovery?.confidence || 60}%</strong></div>
           </div>
 
           <div className="button-row">
