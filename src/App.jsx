@@ -53,12 +53,7 @@ export default function App() {
   }, 1800);
 };
 
-    if (!contact.email.trim()) return;
-    setStep("generating");
-    setTimeout(() => setStep("report"), 2200);
-  };
-
-  if (step === "loading") {
+   if (step === "loading") {
     return (
       <div className="dark-page">
         <div className="center-content">
