@@ -43,30 +43,54 @@ export default function App() {
 
   setStep("generating");
 
-  const { error } = await supabase.from("analysis_reports").insert([
-    {
-      target,
-      goal,
-      challenge,
-      resources,
-      attempts,
-      success_criteria: successCriteria,
-      email: contact.email,
-      name: contact.name,
-      company: contact.company,
-    },
-  ]);
+  try {
+    const response = await fetch("/api/analyze", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        target,
+        goal,
+        challenge,
+        resources,
+        attempts,
+        successCriteria,
+      }),
+    });
 
-  if (error) {
-    console.error("Supabase 저장 오류:", error);
-    alert("저장 중 오류가 발생했습니다.");
-    setStep("email");
-    return;
-  }
+    const result = await response.json();
 
-  setTimeout(() => {
+    if (!response.ok) {
+      throw new Error(result.error || "AI 분석 오류");
+    }
+
+    setAiReport(result.report);
+
+    const { error } = await supabase.from("analysis_reports").insert([
+      {
+        target,
+        goal,
+        challenge,
+        resources,
+        attempts,
+        success_criteria: successCriteria,
+        email: contact.email,
+        name: contact.name,
+        company: contact.company,
+      },
+    ]);
+
+    if (error) {
+      console.error("Supabase 저장 오류:", error);
+    }
+
     setStep("report");
-  }, 1800);
+  } catch (error) {
+    console.error(error);
+    alert("AI 분석 중 오류가 발생했습니다.");
+    setStep("email");
+  }
 };
 
    if (step === "admin") {
@@ -301,8 +325,8 @@ export default function App() {
             <div className="summary-highlight">
               <h3>현재 종합 진단</h3>
               <p>
-                <strong>{target}</strong>은 현재 명확한 분석 목표를 가지고 있으나,
-                이를 실제 성과로 연결하기 위해서는 목표 고객, 메시지, 실행 우선순위를 더 구체적으로 정리할 필요가 있습니다.
+                {aiReport?.summary ||
+                  `${target}은 현재 명확한 분석 목표를 가지고 있으나, 이를 실제 성과로 연결하기 위해서는 목표 고객, 메시지, 실행 우선순위를 더 구체적으로 정리할 필요가 있습니다.`}
               </p>
             </div>
 
@@ -327,19 +351,32 @@ export default function App() {
           </section>
 
           <section className="swot-grid">
-            <div><h3>Strength</h3><p>기존 자산과 경험을 전략적으로 정리할 수 있는 기반이 있습니다.</p></div>
-            <div><h3>Weakness</h3><p>핵심 메시지와 실행 우선순위가 더 명확하게 정리될 필요가 있습니다.</p></div>
-            <div><h3>Opportunity</h3><p>AI 검색, 콘텐츠 정비, 협력 네트워크 확장 가능성이 있습니다.</p></div>
-            <div><h3>Threat</h3><p>경쟁 증가와 관심 분산에 대응하기 위한 차별화 전략이 필요합니다.</p></div>
+            <div><h3>Strength</h3><p>{aiReport?.swot?.strength || "기존 자산과 경험을 전략적으로 정리할 수 있는 기반이 있습니다."}</p></div>
+<div><h3>Weakness</h3><p>{aiReport?.swot?.weakness || "핵심 메시지와 실행 우선순위가 더 명확하게 정리될 필요가 있습니다."}</p></div>
+<div><h3>Opportunity</h3><p>{aiReport?.swot?.opportunity || "AI 검색, 콘텐츠 정비, 협력 네트워크 확장 가능성이 있습니다."}</p></div>
+<div><h3>Threat</h3><p>{aiReport?.swot?.threat || "경쟁 증가와 관심 분산에 대응하기 위한 차별화 전략이 필요합니다."}</p></div>
           </section>
 
           <section>
             <h2>핵심 문제 정의</h2>
-            <p>현재 문제는 단순히 더 많이 알리는 것이 아니라, 누구에게 어떤 이유로 선택되어야 하는지를 명확히 만드는 데 있습니다.</p>
+           <p>
+            {aiReport?.problem ||
+              "현재 문제는 단순히 더 많이 알리는 것이 아니라, 누구에게 어떤 이유로 선택되어야 하는지를 명확히 만드는 데 있습니다."}
+          </p>
           </section>
 
           <section>
-            <h2>Quick Win</h2>
+           <ul>
+            {aiReport?.quickWins?.map((item, index) => (
+              <li key={index}>{item}</li>
+            )) || (
+            <>
+      <li>이번 주: 공식 소개문과 FAQ를 정리합니다.</li>
+      <li>이번 달: 목표별 메시지를 분리합니다.</li>
+      <li>3개월: 실행 결과를 바탕으로 재분석합니다.</li>
+    </>
+  )}
+</ul>
             <ul>
               <li>이번 주: 공식 소개문과 FAQ를 정리합니다.</li>
               <li>이번 달: 목표별 메시지를 분리합니다.</li>
