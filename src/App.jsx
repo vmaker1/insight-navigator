@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
+import { supabase } from "./lib/supabase";
 
 export default function App() {
   const [step, setStep] = useState("landing");
@@ -21,7 +22,37 @@ export default function App() {
     setTimeout(() => setStep("confirm"), 2200);
   };
 
-  const createReport = () => {
+  const createReport = async () => {
+  if (!contact.email.trim()) return;
+
+  setStep("generating");
+
+  const { error } = await supabase.from("analysis_reports").insert([
+    {
+      target,
+      goal,
+      challenge,
+      resources,
+      attempts,
+      success_criteria: successCriteria,
+      email: contact.email,
+      name: contact.name,
+      company: contact.company,
+    },
+  ]);
+
+  if (error) {
+    console.error("Supabase 저장 오류:", error);
+    alert("저장 중 오류가 발생했습니다.");
+    setStep("email");
+    return;
+  }
+
+  setTimeout(() => {
+    setStep("report");
+  }, 1800);
+};
+
     if (!contact.email.trim()) return;
     setStep("generating");
     setTimeout(() => setStep("report"), 2200);
