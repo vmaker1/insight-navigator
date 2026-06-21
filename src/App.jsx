@@ -16,6 +16,7 @@ export default function App() {
     company: "",
   });
   const [reports, setReports] = useState([]);
+  const [aiReport, setAiReport] = useState(null);
 
   const loadReports = async () => {
   const { data, error } = await supabase
