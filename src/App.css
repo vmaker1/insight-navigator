@@ -346,3 +346,40 @@ button {
     grid-template-columns: 1fr;
   }
 }
+
+.admin-link {
+  margin-top: 24px;
+  background: transparent;
+  border: 1px solid #333;
+  color: #888;
+  padding: 10px 18px;
+  font-size: 13px;
+}
+
+.admin-list {
+  display: grid;
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.admin-item {
+  background: #f7f8fb;
+  border-radius: 18px;
+  padding: 24px;
+  border: 1px solid #e8e8e8;
+}
+
+.admin-item h3 {
+  color: #173a77;
+  margin-bottom: 12px;
+}
+
+.admin-item p {
+  margin-bottom: 8px;
+}
+
+.admin-item .date {
+  color: #888;
+  font-size: 14px;
+  margin-top: 12px;
+}

@@ -15,6 +15,21 @@ export default function App() {
     name: "",
     company: "",
   });
+  const [reports, setReports] = useState([]);
+
+  const loadReports = async () => {
+  const { data, error } = await supabase
+    .from("analysis_reports")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  setReports(data || []);
+};
 
   const startAnalysis = () => {
     if (!target.trim()) return;
@@ -52,6 +67,48 @@ export default function App() {
     setStep("report");
   }, 1800);
 };
+
+   if (step === "admin") {
+  return (
+    <div className="report-page">
+      <div className="report-container">
+        <p className="eyebrow dark">Admin</p>
+        <h1>분석 요청 관리</h1>
+
+        <button onClick={loadReports}>데이터 새로고침</button>
+
+        <section>
+          <h2>저장된 분석 요청</h2>
+
+          {reports.length === 0 ? (
+            <p>아직 불러온 데이터가 없습니다.</p>
+          ) : (
+            <div className="admin-list">
+              {reports.map((item) => (
+                <div className="admin-item" key={item.id}>
+                  <h3>{item.target || "분석 대상 없음"}</h3>
+                  <p><strong>이메일:</strong> {item.email}</p>
+                  <p><strong>목표:</strong> {item.goal}</p>
+                  <p><strong>문제:</strong> {item.challenge}</p>
+                  <p><strong>자원:</strong> {item.resources}</p>
+                  <p><strong>기존 시도:</strong> {item.attempts}</p>
+                  <p><strong>성공 기준:</strong> {item.success_criteria}</p>
+                  <p className="date">
+                    {new Date(item.created_at).toLocaleString("ko-KR")}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <button className="secondary" onClick={() => setStep("landing")}>
+          처음으로
+        </button>
+      </div>
+    </div>
+  );
+}
 
    if (step === "loading") {
     return (
@@ -312,6 +369,11 @@ export default function App() {
           <button onClick={startAnalysis}>분석 시작</button>
         </div>
         <p className="examples">기업 · 브랜드 · 행사 · 기관 · 프로젝트</p>
+        
+        <button className="admin-link" onClick={() => setStep("admin")}>
+        Admin
+        </button>
+      
       </div>
     </div>
   );
