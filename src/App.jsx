@@ -364,16 +364,50 @@ export default function App() {
               <div><span>성공 기준</span><p>{successCriteria || "성공 기준 정보가 부족합니다."}</p></div>
             </div>
           </section>
+          
+          <section className="wow-section">
+            <h2>AI 핵심 발견 TOP 5</h2>
+            <div className="wow-grid">
+              {(aiReport?.insights || [
+                "참가자 증가보다 전환율 개선이 더 중요할 수 있습니다.",
+                "AI 검색 노출이 경쟁사 대비 낮을 가능성이 있습니다.",
+                "핵심 혜택이 홈페이지에서 충분히 강조되지 않고 있습니다.",
+                "브랜드 자산 대비 SNS 활용도가 낮아 보입니다.",
+                "후원사 관점의 콘텐츠가 부족할 수 있습니다.",
+              ]).map((item, index) => (
+                <div key={index} className="wow-card">
+                  <strong>#{index + 1}</strong>
+                  <p>{item}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="risk-section">
+            <h2>AI 위험 신호</h2>
+            <div className="wow-grid">
+              {(aiReport?.risks || [
+                "참가자 모집 채널 집중",
+                "후원사 의존도 증가",
+                "브랜드 차별성 약화",
+              ]).map((item, index) => (
+                <div key={index} className="risk-card">
+                  <strong>위험 {index + 1}</strong>
+                  <p>{item}</p>
+                </div>
+              ))}
+            </div>
+          </section>
 
           <section className="score-section">
             <h2>진단 점수</h2>
             <div className="score-grid">
-              <div><span>시장성</span><strong>78</strong></div>
-              <div><span>브랜드 신뢰도</span><strong>82</strong></div>
-              <div><span>AI 노출도</span><strong>54</strong></div>
-              <div><span>차별화 메시지</span><strong>61</strong></div>
-              <div><span>실행 준비도</span><strong>68</strong></div>
-              <div><span>기회 가능성</span><strong>84</strong></div>
+              <div><span>시장성</span><strong>{aiReport?.scores?.market ?? 78}</strong></div>
+              <div><span>브랜드 신뢰도</span><strong>{aiReport?.scores?.brand ?? 82}</strong></div>
+              <div><span>AI 노출도</span><strong>{aiReport?.scores?.aiVisibility ?? 54}</strong></div>
+              <div><span>차별화 메시지</span><strong>{aiReport?.scores?.differentiation ?? 61}</strong></div>
+              <div><span>실행 준비도</span><strong>{aiReport?.scores?.readiness ?? 68}</strong></div>
+              <div><span>기회 가능성</span><strong>{aiReport?.scores?.opportunity ?? 84}</strong></div>
             </div>
           </section>
 
@@ -393,21 +427,17 @@ export default function App() {
           </section>
 
           <section>
-           <ul>
-            {aiReport?.quickWins?.map((item, index) => (
-              <li key={index}>{item}</li>
-            )) || (
-            <>
-      <li>이번 주: 공식 소개문과 FAQ를 정리합니다.</li>
-      <li>이번 달: 목표별 메시지를 분리합니다.</li>
-      <li>3개월: 실행 결과를 바탕으로 재분석합니다.</li>
-    </>
-  )}
-</ul>
+           <h2>Quick Win</h2>
             <ul>
-              <li>이번 주: 공식 소개문과 FAQ를 정리합니다.</li>
-              <li>이번 달: 목표별 메시지를 분리합니다.</li>
-              <li>3개월: 실행 결과를 바탕으로 재분석합니다.</li>
+              {aiReport?.quickWins?.map((item, index) => (
+                <li key={index}>{item}</li>
+              )) || (
+                <>
+                  <li>이번 주: 공식 소개문과 FAQ를 정리합니다.</li>
+                  <li>이번 달: 목표별 메시지를 분리합니다.</li>
+                  <li>3개월: 실행 결과를 바탕으로 재분석합니다.</li>
+                </>
+              )}
             </ul>
           </section>
         </div>

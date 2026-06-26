@@ -383,3 +383,23 @@ button {
   font-size: 14px;
   margin-top: 12px;
 }
+
+.wow-section, .risk-section { margin-top: 40px; }
+
+.wow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.wow-card, .risk-card {
+  border-radius: 14px;
+  padding: 20px;
+  background: #f7f8fa;
+  border: 1px solid #eceef1;
+}
+
+.wow-card strong { display: block; font-size: 22px; color: #2b6cff; margin-bottom: 8px; }
+.risk-card { background: #fff5f5; border-color: #ffe0e0; }
+.risk-card strong { display: block; color: #e23b3b; margin-bottom: 8px; }
